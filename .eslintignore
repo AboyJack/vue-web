@@ -7,3 +7,4 @@ cache/
 dll/
 node_modules/
 static/module-icon/
+/test/unit/coverage/
