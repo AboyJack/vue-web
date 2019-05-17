@@ -1,11 +1,11 @@
 <template>
   <div v-highlight>
-    <!-- <div class="top">
+    <div class="top">
       <h1>
         <i class="iconfont icon-zhankai1"></i>
         <i class="iconfont icon-web-channel"><span>Web</span></i>
       </h1>
-    </div> -->
+    </div>
     <a class="back-top"
        @click="toTop">
       <i class="iconfont icon-top"></i>
