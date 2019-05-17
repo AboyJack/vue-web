@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    "transform-object-rest-spread",
+    "transform-vue-jsx",
+    "syntax-dynamic-import",
+    [
+      "transform-runtime",
+      {
+        "helpers": true,
+        "polyfill": false
+      }
+    ]
+  ]
+}
