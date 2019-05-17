@@ -2,6 +2,10 @@
 
 > 知识整理
 
+## clone
+```
+git clone https://github.com/AboyJack/vue-web.git
+```
 ## Build Setup
 
 ``` bash
