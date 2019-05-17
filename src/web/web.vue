@@ -17,6 +17,10 @@
                   @focus="onEditorFocus($event)"
                   @change="onEditorChange($event)">
     </quill-editor>
+    <div class="quill-code">
+      <code class="hljs"
+            v-html="contentCode"></code>
+    </div>
   </div>
 </template>
 <script>
@@ -24,6 +28,7 @@
   import 'quill/dist/quill.snow.css'
   import 'quill/dist/quill.bubble.css'
   import { quillEditor } from 'vue-quill-editor'
+  import hljs from 'highlight.js'
 
   export default {
     name: 'web',
@@ -34,6 +39,9 @@
       editor () {
         return this.$refs.myQuillEditor.quill
       },
+      contentCode () {
+        return hljs.highlightAuto(this.editorContent).value
+      }
     },
     mounted () {
       this.onscroll()
@@ -46,10 +54,27 @@
         isTop: true, // 定义一个布尔值，用于判断是否到达顶部
         editorContent: '',
         editorOption: {
-          // modules: {
-          //   syntax: true, // Include syntax module
-          //   toolbar: [['code-block']] // Include button in toolbar
-          // },
+          modules: {
+            syntax: {
+              highlight: text => hljs.highlightAuto(text).value
+            }, // Include syntax module
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{ 'header': 1 }, { 'header': 2 }],
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+              [{ 'script': 'sub' }, { 'script': 'super' }],
+              [{ 'indent': '-1' }, { 'indent': '+1' }],
+              [{ 'direction': 'rtl' }],
+              [{ 'size': ['small', false, 'large', 'huge'] }],
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+              [{ 'font': [] }],
+              [{ 'color': [] }, { 'background': [] }],
+              [{ 'align': [] }],
+              ['clean'],
+              ['link', 'image', 'video']
+            ], // Include button in toolbar
+          },
           placeholder: '请输入...',
           theme: 'snow' // 主题 bubble snow
         }
@@ -111,5 +136,20 @@
   .quill-editor {
     width: 100%;
     padding: 0px 1%;
+  }
+  .quill-code {
+    border: none;
+    height: auto;
+    > code {
+      width: 98%;
+      margin: 12px 1%;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-top: none;
+      border-radius: 4px;
+      height: 10rem;
+      overflow-y: auto;
+      resize: vertical;
+    }
   }
 </style>
