@@ -1,5 +1,5 @@
 <template>
-  <div v-highlight>
+  <div>
     <!-- <div class="top">
       <h1>
         <i class="iconfont icon-zhankai1"></i>
@@ -21,14 +21,28 @@
       <code class="hljs"
             v-html="contentCode"></code>
     </div>
+    <div class="save-btn">
+      <input type="button"
+             value="保存"
+             @click="saveForJson">
+    </div>
+    <div class="html-list"
+         v-for="(item, index) in htmlList"
+         :key="index">
+      <span class="html-span"
+            v-html="item.text"></span>
+    </div>
   </div>
 </template>
 <script>
   import 'quill/dist/quill.core.css'
   import 'quill/dist/quill.snow.css'
-  import 'quill/dist/quill.bubble.css'
+  // import 'quill/dist/quill.bubble.css'
   import { quillEditor } from 'vue-quill-editor'
+  import { saveAs } from 'file-saver'
   import hljs from 'highlight.js'
+  // import axios from 'axios'
+  import webHtml from '../json/web.json'
 
   export default {
     name: 'web',
@@ -45,6 +59,7 @@
     },
     mounted () {
       this.onscroll()
+      this.initData()
     },
     data () {
       return {
@@ -53,6 +68,8 @@
         timer: '', // 定义一个定时器
         isTop: true, // 定义一个布尔值，用于判断是否到达顶部
         editorContent: '',
+        contentHtml: [],
+        htmlList: [],
         editorOption: {
           modules: {
             syntax: {
@@ -81,6 +98,20 @@
       }
     },
     methods: {
+      initData () {
+        this.htmlList = webHtml
+        console.log(this.htmlList)
+        if (this.htmlList) {
+          this.contentHtml = this.htmlList
+        }
+        console.log(this.htmlList)
+        // console.log(this.$route.params)
+        // axios.get('../json/web.json').then(res => {
+        //   console.log(res)
+        // }).catch(e => {
+        //   console.log(e)
+        // })
+      },
       // 准备编辑器
       onEditorReady (editor) {
         console.log('准备编辑器')
@@ -102,6 +133,20 @@
         str = str.replace(/&lt;/g, '<')
         str = str.replace(/&gt;/g, '>')
         return str
+      },
+      // 存为json文件
+      saveForJson () {
+        console.log(this.editorContent)
+        if (this.editorContent) {
+          let content = this.editorContent
+          console.log(content)
+          this.contentHtml.push({
+            text: content
+          })
+          let blod = new Blob([JSON.stringify(this.contentHtml)], { type: '' })
+          console.log(blod)
+          saveAs(blod, 'web.json')
+        }
       },
       onscroll () {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -133,6 +178,10 @@
   }
 </script>
 <style lang="scss" scoped>
+  @mixin block-style {
+    width: 98%;
+    margin-left: 1%;
+  }
   .quill-editor {
     width: 100%;
     padding: 0px 1%;
@@ -150,6 +199,30 @@
       height: 10rem;
       overflow-y: auto;
       resize: vertical;
+    }
+  }
+  .save-btn {
+    @include block-style;
+    margin-bottom: 1em;
+    text-align: right;
+  }
+  .html-list {
+    @include block-style;
+    font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", Helvetica,
+      Arial, sans-serif;
+    height: 100%;
+    margin-bottom: 1em;
+    border-radius: 0.6em;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    &:hover {
+      // background-color: rgb(236, 236, 236);
+      box-shadow: 0 0 10px #65bd60;
+    }
+    .html-span {
+      font-size: 0.89em;
+      color: rgb(48, 48, 48);
+      margin: 0.2em 1.5em;
+      line-height: 1.6em;
     }
   }
 </style>
