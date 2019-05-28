@@ -32,6 +32,54 @@
       <span class="html-span"
             v-html="item.text"></span>
     </div>
+    <div v-highlight>
+      <pre>
+<!-- 声明什么类型的代码 -->
+<code class="css">
+.hljs {
+  font-family: "Inconsolata", "Monaco", "Consolas", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+  font-size: 13px;
+  width: 98%;
+  margin-left: 1%;
+  background: #282c34;
+  padding: 0px 0.5em 0.5em 0.5em;
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px #333;
+  -webkit-box-shadow: 0px 0px 10px #333;
+  white-space: pre;
+}
+</code>
+<code class="javascript">
+  // 声明什么类型的代码
+  var a = 123;
+  var b = document.getElementById('tr')
+</code>
+<code class="html">
+  &lt;div&gt;&lt;/div&gt;<!-- html代码需要转义 -->
+</code>
+<code class="nohighlight">
+  var aa = 1
+</code>
+<code class="plaintext">
+  var aa = 1
+</code>
+<code class="http">
+  POST /task?id=1 HTTP/1.1
+  Host: example.org
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 137
+
+  {
+    "status": "ok",
+    "extended": true,
+    "results": [
+      {"value": 0, "type": "int64"},
+      {"value": 1.0e+3, "type": "decimal"}
+    ]
+  }
+</code>
+        </pre>
+    </div>
   </div>
 </template>
 <script>
@@ -41,6 +89,7 @@
   import { quillEditor } from 'vue-quill-editor'
   import { saveAs } from 'file-saver'
   import hljs from 'highlight.js'
+  // import 'highlight.js/styles/atom-one-light.css'
   // import axios from 'axios'
   import webHtml from '../json/web.json'
 
@@ -114,7 +163,7 @@
       },
       // 准备编辑器
       onEditorReady (editor) {
-        console.log('准备编辑器')
+        console.log(editor, '准备编辑器')
       },
       // 失去焦点事件
       onEditorBlur () {
@@ -125,8 +174,12 @@
         console.log('获得焦点事件')
       },
       // 内容改变事件
-      onEditorChange (editor) {
-        console.log('内容改变事件', editor)
+      onEditorChange (el) {
+        console.log('内容改变事件', el.quill)
+        console.log(el.quill.container.querySelectorAll('.ql-editor pre'))
+        console.log(this.editorContent)
+        // let aa = el.quill.container.querySelectorAll('pre code')
+        // console.log(aa)
       },
       // 把实体格式字符串转义成HTML格式的字符串
       escapeStringHTML (str) {
@@ -146,6 +199,7 @@
           let blod = new Blob([JSON.stringify(this.contentHtml)], { type: '' })
           console.log(blod)
           saveAs(blod, 'web.json')
+          this.editorContent = ''
         }
       },
       onscroll () {
@@ -196,7 +250,7 @@
       border: 1px solid #ccc;
       border-top: none;
       border-radius: 4px;
-      height: 10rem;
+      height: 8rem;
       overflow-y: auto;
       resize: vertical;
     }

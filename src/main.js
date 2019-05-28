@@ -11,6 +11,7 @@ import 'highlight.js/styles/atom-one-light.css'
 
 Vue.directive('highlight', function (el) {
   let blocks = el.querySelectorAll('pre code')
+  // console.log(el, blocks)
   blocks.forEach((block) => {
     highLight.highlightBlock(block)
   })
