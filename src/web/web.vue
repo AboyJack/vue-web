@@ -1,15 +1,21 @@
 <template>
   <div>
-    <!-- <div class="top">
+    <div class="top">
       <h1>
         <i class="iconfont icon-zhankai1"></i>
-        <i class="iconfont icon-web-channel"><span>Web</span></i>
+        <i class="iconfont icon-web-channel"
+           style="margin-left: 0.9em;"><span>Web</span></i>
       </h1>
-    </div> -->
+    </div>
     <a class="back-top"
        @click="toTop">
       <i class="iconfont icon-top"></i>
     </a>
+    <div class="default-btn">
+      <input type="button"
+             value="地图"
+             @click="routerLink">
+    </div>
     <quill-editor ref="myQuillEditor"
                   v-model="editorContent"
                   :options="editorOption"
@@ -93,6 +99,7 @@
   // import axios from 'axios'
   import webHtml from '../json/web.json'
 
+
   export default {
     name: 'web',
     components: {
@@ -147,6 +154,9 @@
       }
     },
     methods: {
+      routerLink () {
+        this.$router.push('/map')
+      },
       initData () {
         this.htmlList = webHtml
         console.log(this.htmlList)
@@ -254,6 +264,10 @@
       overflow-y: auto;
       resize: vertical;
     }
+  }
+  .default-btn {
+    @include block-style;
+    margin-bottom: 1em;
   }
   .save-btn {
     @include block-style;
